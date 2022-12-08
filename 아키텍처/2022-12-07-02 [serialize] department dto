@@ -1,0 +1,12 @@
+
+- 만약 캐쉬기능을 활성화가 위한 과정
+	- application.xml
+	    url: jdbc:mysql://localhost:3306/ecommerce_db?useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+	- mapper cachenamespace 기능 설정
+		@CacheNamespace(flushInterval=10000)
+		public interface DepartmentMapper {
+		}
+	- dto serializable 설정
+		public class Department implements Serializable {
+    		private static final long serialVersionUID = 1L;
+		}

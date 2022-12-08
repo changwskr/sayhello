@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eplaton.xyz.board.business.repository.mapper.IBoardMapper">
+	
+	<resultMap type="com.eplaton.xyz.board.business.repository.entity.Board" id="boardResultMap">
+		<result property="id" column="ID" />
+		<result property="writer" column="WRITER" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="regDate" column="REG_DATE" />
+		<result property="hitCount" column="HIT_COUNT" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.eplaton.xyz.board.business.repository.entity.Board">
+		INSERT INTO xboard(writer, title, content, reg_date, hit_count)
+		VALUES(#{writer}, #{title}, #{content}, SYSDATE, 0)
+	</insert>
+	
+	<update id="update" parameterType="com.eplaton.xyz.board.business.repository.entity.Board">
+		UPDATE xboard SET title=#{title}, content=#{content} WHERE id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM xboard WHERE id=#{id}
+	</delete>
+	
+	<select id="selectById" parameterType="long" resultMap="boardResultMap">
+		SELECT * FROM xboard WHERE id=#{id}
+	</select>
+	
+	
+	<select id="selectByLimit" resultType="com.eplaton.xyz.board.business.repository.entity.Board">
+		<bind name="start" value="@com.eplaton.xyz.board.transfer.Pager@seekStart(page, size)"/>
+		<bind name="end" value="@com.eplaton.xyz.board.transfer.Pager@seekEnd(page, size)"/>
+		SELECT * FROM (
+			SELECT ROWNUM AS rnum, b.* 
+			FROM (
+				SELECT * FROM xboard 
+				ORDER BY id DESC
+			) b
+		    WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}
+	</select>
+	
+	<update id="increment">
+		UPDATE xboard SET hit_count=hit_count+1 WHERE id=#{id} and writer!=#{requester}
+	</update>
+	
+</mapper>

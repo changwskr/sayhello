@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+<button onClick="request()">요청하기</button>
+<script>
+
+function request(){
+	var reqdata = {
+			username : "ssar",
+			password : "222223333322",
+			phone : "1010000"
+	}
+	
+	$.ajax({
+		type:"post", // post 전송
+		url:"http://localhost:8080/person/usergoobjectpermit3", // 목적지
+		data:JSON.stringify(reqdata), // 보낼데이타를 json으로 변경해
+		contentType: "application/json; charset:utf-8", // 보낼 컨텐츠 타입이 뭐야
+		dataType: "json" // 받는 것은 json타입이야
+	}).done(function(result){ // result 받은 데이타야
+		console.log(result); // 화면으로 뿌려봐
+	});	
+}
+</script>
+
+</body>
+</html>
